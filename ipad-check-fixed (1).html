@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>iPad Check</title>
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700&display=swap" rel="stylesheet">
+<style>
+/* Art direction: utility tool → clean, functional, professional
+   Palette: warm neutral, accent teal (Nexus)
+   Typography: Satoshi body — clear, modern sans
+   Density: balanced */
+
+:root, [data-theme="light"] {
+  --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+  --text-sm: clamp(0.875rem, 0.8rem + 0.35vw, 1rem);
+  --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+  --text-lg: clamp(1.125rem, 1rem + 0.75vw, 1.5rem);
+  --text-xl: clamp(1.5rem, 1.2rem + 1.25vw, 2.25rem);
+  --space-1: 0.25rem; --space-2: 0.5rem; --space-3: 0.75rem; --space-4: 1rem;
+  --space-5: 1.25rem; --space-6: 1.5rem; --space-8: 2rem; --space-10: 2.5rem;
+  --space-12: 3rem; --space-16: 4rem;
+  --radius-sm: 0.375rem; --radius-md: 0.5rem; --radius-lg: 0.75rem; --radius-xl: 1rem; --radius-full: 9999px;
+  --transition: 180ms cubic-bezier(0.16, 1, 0.3, 1);
+  --shadow-sm: 0 1px 2px rgba(40,37,29,0.06);
+  --shadow-md: 0 4px 12px rgba(40,37,29,0.08);
+  --shadow-lg: 0 12px 32px rgba(40,37,29,0.12);
+  --font-body: 'Satoshi', 'Inter', sans-serif;
+  --color-bg: #f7f6f2; --color-surface: #f9f8f5; --color-surface-2: #fbfbf9;
+  --color-surface-offset: #f3f0ec; --color-border: #d4d1ca; --color-divider: #dcd9d5;
+  --color-text: #28251d; --color-text-muted: #7a7974; --color-text-faint: #bab9b4;
+  --color-primary: #01696f; --color-primary-hover: #0c4e54; --color-primary-highlight: #cedcd8;
+  --color-error: #a12c7b; --color-error-highlight: #e0ced7;
+  --color-success: #437a22; --color-success-highlight: #d4dfcc;
+  --color-warning: #964219; --color-warning-highlight: #ddcfc6;
+  --color-notification: #a13544; --color-notification-highlight: #dececb;
+}
+[data-theme="dark"] {
+  --color-bg: #171614; --color-surface: #1c1b19; --color-surface-2: #201f1d;
+  --color-surface-offset: #1d1c1a; --color-border: #393836; --color-divider: #262523;
+  --color-text: #cdccca; --color-text-muted: #797876; --color-text-faint: #5a5957;
+  --color-primary: #4f98a3; --color-primary-hover: #227f8b; --color-primary-highlight: #313b3b;
+  --color-error: #d163a7; --color-error-highlight: #4c3d46;
+  --color-success: #6daa45; --color-success-highlight: #3a4435;
+  --color-warning: #bb653b; --color-warning-highlight: #564942;
+  --color-notification: #dd6974; --color-notification-highlight: #574848;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.2); --shadow-md: 0 4px 12px rgba(0,0,0,0.3);
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme]) {
+  --color-bg: #171614; --color-surface: #1c1b19; --color-surface-2: #201f1d;
+  --color-surface-offset: #1d1c1a; --color-border: #393836; --color-divider: #262523;
+  --color-text: #cdccca; --color-text-muted: #797876; --color-text-faint: #5a5957;
+  --color-primary: #4f98a3; --color-primary-hover: #227f8b; --color-primary-highlight: #313b3b;
+  --color-error: #d163a7; --color-error-highlight: #4c3d46;
+  --color-success: #6daa45; --color-success-highlight: #3a4435;
+  --color-warning: #bb653b; --color-warning-highlight: #564942;
+  --color-notification: #dd6974; --color-notification-highlight: #574848;
+}}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+html { -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
+body { min-height: 100vh; min-height: 100dvh; font-family: var(--font-body); font-size: var(--text-sm); color: var(--color-text); background: var(--color-bg); line-height: 1.6; }
+input, button, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; background: none; border: none; }
+a, button, input, select { transition: color var(--transition), background var(--transition), border-color var(--transition), box-shadow var(--transition); }
+:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 3px; border-radius: var(--radius-sm); }
+
+/* Layout */
+.app { display: grid; grid-template-rows: auto 1fr; min-height: 100vh; min-height: 100dvh; }
+.topbar {
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  padding: var(--space-3) var(--space-6);
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 10;
+  box-shadow: var(--shadow-sm);
+}
+.logo { display: flex; align-items: center; gap: var(--space-2); font-weight: 700; font-size: var(--text-base); }
+.logo svg { color: var(--color-primary); }
+.topbar-actions { display: flex; align-items: center; gap: var(--space-2); }
+.main { padding: var(--space-8) var(--space-4); max-width: 960px; margin-inline: auto; width: 100%; }
+
+/* Cards */
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-sm);
+}
+.card + .card { margin-top: var(--space-4); }
+.card-title { font-size: var(--text-base); font-weight: 600; margin-bottom: var(--space-4); display: flex; align-items: center; gap: var(--space-2); }
+.card-title svg { color: var(--color-primary); flex-shrink: 0; }
+
+/* Buttons */
+.btn {
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  padding: var(--space-2) var(--space-5); border-radius: var(--radius-md);
+  font-size: var(--text-sm); font-weight: 500; cursor: pointer;
+  transition: background var(--transition), box-shadow var(--transition);
+}
+.btn-primary { background: var(--color-primary); color: #fff; border: 1px solid transparent; }
+.btn-primary:hover { background: var(--color-primary-hover); }
+.btn-secondary { background: var(--color-surface-offset); color: var(--color-text); border: 1px solid var(--color-border); }
+.btn-secondary:hover { background: var(--color-divider); }
+.btn-danger { background: var(--color-notification); color: #fff; border: 1px solid transparent; }
+.btn-danger:hover { background: #782b33; }
+.btn-sm { padding: var(--space-1) var(--space-3); font-size: var(--text-xs); }
+.btn-icon { padding: var(--space-2); border-radius: var(--radius-md); color: var(--color-text-muted); }
+.btn-icon:hover { background: var(--color-surface-offset); color: var(--color-text); }
+
+/* Form elements */
+.input-group { display: flex; flex-direction: column; gap: var(--space-1); }
+.input-group label { font-size: var(--text-xs); font-weight: 500; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+input[type="text"], input[type="number"] {
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--text-sm);
+  width: 100%;
+}
+input[type="text"]:focus, input[type="number"]:focus {
+  outline: 2px solid var(--color-primary); outline-offset: 0;
+  border-color: var(--color-primary);
+}
+.input-row { display: flex; gap: var(--space-3); align-items: flex-end; }
+.input-row .input-group { flex: 1; }
+
+/* Setup section */
+.setup-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: var(--space-2); margin-top: var(--space-3); }
+.ipad-setup-item {
+  display: flex; flex-direction: column; align-items: center; gap: var(--space-1);
+  padding: var(--space-3) var(--space-2);
+  background: var(--color-surface-2); border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg); cursor: pointer;
+  user-select: none;
+  transition: all var(--transition);
+}
+.ipad-setup-item:hover { border-color: var(--color-primary); }
+.ipad-setup-item.remove { border-color: var(--color-notification); background: var(--color-notification-highlight); }
+.ipad-setup-item .num { font-weight: 700; font-size: var(--text-base); }
+.ipad-setup-item .lbl { font-size: var(--text-xs); color: var(--color-text-muted); }
+
+/* Check grid */
+.check-grid { display: flex; flex-direction: column; gap: var(--space-3); margin-top: var(--space-3); }
+/* Shelf sections */
+
+.shelf-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.shelf-header {
+  display: flex; flex-direction: row; align-items: center; justify-content: space-between;
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-surface-offset);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  margin-bottom: 0;
+}
+.shelf-label { font-weight: 700; font-size: var(--text-sm); }
+.shelf-meta { font-size: var(--text-xs); }
+.check-grid-inner {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  gap: var(--space-2);
+  padding: var(--space-3);
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-top: none;
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+}
+/* Setup shelf grouping */
+.setup-shelf-group { margin-bottom: var(--space-4); }
+.setup-shelf-label { font-size: var(--text-xs); font-weight: 700; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: var(--space-2); padding: var(--space-1) var(--space-2); background: var(--color-surface-offset); border-radius: var(--radius-sm); display: inline-block; }
+.setup-shelf-group .setup-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: var(--space-2); }
+.ipad-tile {
+  display: flex; flex-direction: column; align-items: center; gap: var(--space-1);
+  padding: var(--space-3) var(--space-2);
+  min-height: 80px;
+  border-radius: var(--radius-lg); cursor: pointer; user-select: none;
+  border: 2px solid transparent;
+  transition: all 120ms ease;
+  position: relative;
+  touch-action: manipulation;
+  -webkit-touch-callout: none;
+}
+.ipad-tile.on-shelf { background: var(--color-success-highlight); border-color: var(--color-success); color: var(--color-success); }
+.ipad-tile.taken-out { background: var(--color-warning-highlight); border-color: var(--color-warning); color: var(--color-warning); }
+.ipad-tile.missing { background: var(--color-notification-highlight); border-color: var(--color-notification); color: var(--color-notification); animation: pulse-missing 1.5s ease-in-out infinite; }
+.ipad-tile.unchecked { background: var(--color-surface-2); border-color: var(--color-border); color: var(--color-text-muted); }
+.ipad-tile:active { opacity: 0.75; transform: scale(0.96); }
+.btn:active { opacity: 0.8; }
+/* iOS Safari fixes */
+.ipad-tile, .ipad-setup-item {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  -webkit-touch-callout: none;
+  cursor: pointer;
+}
+textarea[readonly] {
+  -webkit-user-select: text;
+  user-select: text;
+  cursor: text;
+}
+.ipad-tile .tile-num { font-weight: 700; font-size: var(--text-base); }
+.ipad-tile .tile-lbl { font-size: var(--text-xs); font-weight: 500; }
+.ipad-tile .tile-icon { font-size: 1.1rem; }
+
+@keyframes pulse-missing {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(161,53,68,0.4); }
+  50%       { box-shadow: 0 0 0 6px rgba(161,53,68,0); }
+}
+[data-theme="dark"] .ipad-tile.missing,
+@media (prefers-color-scheme: dark) { .ipad-tile.missing } {
+  animation-name: pulse-missing-dark;
+}
+@keyframes pulse-missing-dark {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(221,105,116,0.4); }
+  50%       { box-shadow: 0 0 0 6px rgba(221,105,116,0); }
+}
+
+/* Legend */
+.legend { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: var(--space-4); }
+.legend-item { display: flex; align-items: center; gap: var(--space-2); font-size: var(--text-xs); color: var(--color-text-muted); }
+.legend-dot { width: 10px; height: 10px; border-radius: var(--radius-full); flex-shrink: 0; }
+.dot-shelf { background: var(--color-success); }
+.dot-taken { background: var(--color-warning); }
+.dot-missing { background: var(--color-notification); }
+.dot-unchecked { background: var(--color-border); }
+
+/* Summary */
+.summary-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: var(--space-3); }
+.stat-card {
+  background: var(--color-surface-2); border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg); padding: var(--space-4);
+  text-align: center;
+}
+.stat-card .stat-num { font-size: var(--text-xl); font-weight: 700; line-height: 1; margin-bottom: var(--space-1); }
+.stat-card .stat-lbl { font-size: var(--text-xs); color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+.stat-card.stat-missing .stat-num { color: var(--color-notification); }
+.stat-card.stat-shelf .stat-num { color: var(--color-success); }
+.stat-card.stat-taken .stat-num { color: var(--color-warning); }
+.stat-card.stat-total .stat-num { color: var(--color-primary); }
+
+.tile-team {
+  font-size: 9px; font-weight: 600; padding: 1px 5px; border-radius: var(--radius-full);
+  max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.tile-assign-btn {
+  position: absolute; top: 2px; right: 2px;
+  font-size: 13px; line-height: 1; padding: 5px;
+  min-width: 28px; min-height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--color-surface); border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border); cursor: pointer;
+  touch-action: manipulation;
+}
+.tile-assign-btn:hover { background: var(--color-surface-offset); }
+/* Bottom sheet team picker */
+#team-picker-overlay {
+  display: flex; position: fixed; top: 0; right: 0; bottom: 0; left: 0; background: rgba(0,0,0,0.4);
+  z-index: 200; align-items: flex-end; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 200ms ease;
+  cursor: pointer;
+}
+#team-picker-overlay > #team-picker {
+  cursor: default;
+}
+#team-picker-overlay.show { opacity: 1; pointer-events: auto; }
+#team-picker {
+  background: var(--color-surface);
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  padding: var(--space-5) var(--space-5) calc(var(--space-5) + env(safe-area-inset-bottom, 0px));
+  width: 100%; max-width: 480px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-lg);
+  transform: translateY(100%);
+  transition: transform 200ms cubic-bezier(0.16,1,0.3,1);
+}
+#team-picker-overlay.show #team-picker {
+  transform: translateY(0);
+}
+@keyframes slideUp {
+  from { transform: translateY(100%); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+/* Alert */
+.alert {
+  border-radius: var(--radius-lg); padding: var(--space-4);
+  font-size: var(--text-sm); margin-top: var(--space-4);
+  display: none; align-items: flex-start; gap: var(--space-3);
+}
+.alert.show { display: flex; }
+.alert-missing { background: var(--color-notification-highlight); border: 1px solid var(--color-notification); color: var(--color-notification); }
+.alert-ok { background: var(--color-success-highlight); border: 1px solid var(--color-success); color: var(--color-success); }
+.alert-icon { flex-shrink: 0; margin-top: 2px; }
+.alert strong { display: block; font-weight: 600; }
+.missing-list { margin-top: var(--space-2); display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.missing-badge {
+  background: var(--color-notification); color: #fff;
+  padding: 2px var(--space-2); border-radius: var(--radius-full);
+  font-size: var(--text-xs); font-weight: 600;
+}
+
+/* Tabs */
+.tabs { display: flex; gap: var(--space-1); background: var(--color-surface-offset); padding: var(--space-1); border-radius: var(--radius-lg); margin-bottom: var(--space-6); width: fit-content; }
+.tab-btn { padding: var(--space-2) var(--space-5); border-radius: calc(var(--radius-lg) - 2px); font-size: var(--text-sm); font-weight: 500; color: var(--color-text-muted); cursor: pointer; transition: all var(--transition); }
+.tab-btn.active { background: var(--color-surface); color: var(--color-text); box-shadow: var(--shadow-sm); }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* History */
+.history-list { display: flex; flex-direction: column; gap: var(--space-2); margin-top: var(--space-3); }
+.history-entry {
+  background: var(--color-surface-2); border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg); padding: var(--space-3) var(--space-4);
+  display: flex; justify-content: space-between; align-items: flex-start; gap: var(--space-4);
+  flex-wrap: wrap;
+}
+.history-meta { font-size: var(--text-xs); color: var(--color-text-muted); margin-top: var(--space-1); }
+.history-badges { display: flex; flex-wrap: wrap; gap: var(--space-1); margin-top: var(--space-1); }
+.hbadge { font-size: var(--text-xs); padding: 2px var(--space-2); border-radius: var(--radius-full); font-weight: 600; }
+.hbadge-miss { background: var(--color-notification-highlight); color: var(--color-notification); }
+.hbadge-ok { background: var(--color-success-highlight); color: var(--color-success); }
+
+/* Empty state */
+.empty-state { text-align: center; padding: var(--space-16) var(--space-8); color: var(--color-text-muted); }
+.empty-state svg { margin: 0 auto var(--space-4); opacity: 0.4; }
+
+/* Divider */
+.divider { border: none; border-top: 1px solid var(--color-divider); margin: var(--space-5) 0; }
+
+/* Modal overlay (iOS-safe: use class toggle, not inline display) */
+.modal-overlay {
+  display: none;
+  position: fixed; top: 0; right: 0; bottom: 0; left: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 100;
+  align-items: center; justify-content: center;
+  padding: var(--space-4);
+  cursor: pointer;
+}
+.modal-overlay.modal-open {
+  display: flex;
+}
+.modal-overlay > div {
+  cursor: default;
+}
+/* Responsive */
+@media (max-width: 600px) {
+  .main { padding: var(--space-4) var(--space-3); }
+  .check-grid { gap: var(--space-2); }
+  .check-grid-inner { grid-template-columns: repeat(auto-fill, minmax(72px, 1fr)); }
+  .topbar { padding: var(--space-3) var(--space-4); }
+  .input-row { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- Topbar -->
+<header class="topbar">
+  <div class="logo">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <rect x="5" y="2" width="14" height="20" rx="2"/>
+      <circle cx="12" cy="18" r="1" fill="currentColor" stroke="none"/>
+    </svg>
+    iPad Check
+  </div>
+  <div class="topbar-actions">
+    <button type="button" class="btn btn-secondary btn-sm" id="btn-export" title="Export log as CSV">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Export
+    </button>
+    <button type="button" class="btn-icon" data-theme-toggle aria-label="Switch theme">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+    </button>
+  </div>
+</header>
+
+<main class="main">
+  <!-- Tabs -->
+  <div class="tabs" role="tablist">
+    <button type="button" class="tab-btn active" role="tab" aria-selected="true" id="btn-tab-check">Check</button>
+    <button type="button" class="tab-btn" role="tab" aria-selected="false" id="btn-tab-setup">Setup</button>
+    <button type="button" class="tab-btn" role="tab" aria-selected="false" id="btn-tab-history">History</button>
+  </div>
+
+  <!-- CHECK TAB -->
+  <div id="tab-check" class="tab-panel active">
+    <div class="card">
+      <div class="card-title">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        Tap each iPad to set its status
+      </div>
+      <div id="check-grid" class="check-grid"></div>
+
+      <div class="legend">
+        <span class="legend-item"><span class="legend-dot dot-unchecked"></span> Not yet checked</span>
+        <span class="legend-item"><span class="legend-dot dot-shelf"></span> On shelf</span>
+        <span class="legend-item"><span class="legend-dot dot-taken"></span> Taken out</span>
+        <span class="legend-item"><span class="legend-dot dot-missing"></span> Missing / unknown</span>
+      </div>
+    </div>
+
+    <!-- Alerts -->
+    <div id="alert-missing" class="alert alert-missing" role="alert">
+      <svg class="alert-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <div>
+        <strong>⚠ Missing iPads detected!</strong>
+        <span id="alert-missing-text"></span>
+        <div id="alert-missing-badges" class="missing-list"></div>
+      </div>
+    </div>
+    <div id="alert-ok" class="alert alert-ok" role="status">
+      <svg class="alert-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      <div><strong>All iPads accounted for!</strong> No missing devices.</div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- Summary -->
+    <div class="card-title" style="margin-bottom: var(--space-3)">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+      Summary
+    </div>
+    <div class="summary-grid">
+      <div class="stat-card stat-total"><div class="stat-num" id="stat-total">0</div><div class="stat-lbl">Total</div></div>
+      <div class="stat-card stat-shelf"><div class="stat-num" id="stat-shelf">0</div><div class="stat-lbl">On Shelf</div></div>
+      <div class="stat-card stat-taken"><div class="stat-num" id="stat-taken">0</div><div class="stat-lbl">Taken Out</div></div>
+      <div class="stat-card stat-missing"><div class="stat-num" id="stat-missing">0</div><div class="stat-lbl">Missing</div></div>
+    </div>
+
+    <hr class="divider">
+    <div style="display:flex; gap: var(--space-3); flex-wrap: wrap;">
+      <button type="button" class="btn btn-primary" id="btn-save-check">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        Save Check
+      </button>
+      <button type="button" class="btn btn-secondary" id="btn-reset-check">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4"/></svg>
+        Reset
+      </button>
+    </div>
+  </div>
+
+  <!-- SETUP TAB -->
+  <div id="tab-setup" class="tab-panel">
+    <div class="card">
+      <div class="card-title">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+        Configure iPads
+      </div>
+      <p style="font-size: var(--text-sm); color: var(--color-text-muted); margin-bottom: var(--space-4);">Set the total number of iPads, or add custom labels for each device.</p>
+
+      <div class="input-row" style="margin-bottom: var(--space-4);">
+        <div class="input-group">
+          <label for="quick-count">Number of iPads</label>
+          <input type="number" id="quick-count" min="1" max="200" placeholder="e.g. 20">
+        </div>
+        <div class="input-group">
+          <label for="shelf-count">Number of Shelves</label>
+          <input type="number" id="shelf-count" min="1" max="20" placeholder="e.g. 5" value="5">
+        </div>
+        <button type="button" class="btn btn-primary" id="btn-quick-apply">Apply</button>
+      </div>
+
+      <hr class="divider">
+      <div class="card-title" style="font-size: var(--text-sm);">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add individual iPad
+      </div>
+      <div class="input-row" style="margin-bottom: var(--space-4);">
+        <div class="input-group">
+          <label for="ipad-label">Label (e.g. "iPad 01" or serial)</label>
+          <input type="text" id="ipad-label" placeholder="iPad 01">
+        </div>
+        <div class="input-group">
+          <label for="ipad-shelf-select">Shelf</label>
+          <select id="ipad-shelf-select" style="background:var(--color-surface-2);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:var(--space-2) var(--space-3);font-size:var(--text-sm);width:100%;">
+            <option value="1">Shelf 1</option>
+            <option value="2">Shelf 2</option>
+            <option value="3">Shelf 3</option>
+            <option value="4">Shelf 4</option>
+            <option value="5">Shelf 5</option>
+          </select>
+        </div>
+        <button type="button" class="btn btn-secondary" id="btn-add-ipad">Add</button>
+      </div>
+
+      <div id="setup-grid"></div>
+
+      <hr class="divider">
+      <button type="button" class="btn btn-danger btn-sm" id="btn-clear-all">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+        Clear all iPads
+      </button>
+    </div>
+
+    <div class="card" style="margin-top:var(--space-4);">
+      <div class="card-title">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Teams
+      </div>
+      <p style="font-size:var(--text-sm);color:var(--color-text-muted);margin-bottom:var(--space-3);">Add teams that can take iPads. During a check, tap "👥" on a taken-out iPad to assign it to a team.</p>
+      <div id="team-list" style="margin-bottom:var(--space-3);"></div>
+      <div class="input-row">
+        <div class="input-group">
+          <label for="team-name-input">Team name</label>
+          <input type="text" id="team-name-input" placeholder="e.g. Team Delta">
+        </div>
+        <button type="button" class="btn btn-secondary" id="btn-add-team">Add Team</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- HISTORY TAB -->
+  <div id="tab-history" class="tab-panel">
+    <div class="card">
+      <div class="card-title">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Check History
+      </div>
+      <div id="history-list">
+        <div class="empty-state">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <p>No checks saved yet.<br>Complete a check and tap "Save Check".</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+</div>
+
+<script>
+// State
+let ipads = [];       // { id, label }
+let checkState = {};  // id -> 'unchecked' | 'on-shelf' | 'taken-out' | 'missing'
+let history = [];
+
+// status: unchecked | on-shelf | taken-out | missing
+// checkState[id] = { status, team }
+// teams: array of { id, name, color }
+let teams = [
+  { id: 't1', name: 'Team Alpha', color: '#01696f' },
+  { id: 't2', name: 'Team Bravo', color: '#964219' },
+  { id: 't3', name: 'Team Charlie', color: '#006494' },
+  { id: 't4', name: 'Team Delta', color: '#7a39bb' },
+  { id: 't5', name: 'Team Echo', color: '#a13544' }
+];
+
+const STATUS_CYCLE = ['unchecked', 'on-shelf', 'taken-out', 'missing'];
+const STATUS_LABELS = { 'unchecked': '—', 'on-shelf': '✓ Shelf', 'taken-out': '↑ Out', 'missing': '! Miss' };
+const STATUS_ICONS = { 'unchecked': '○', 'on-shelf': '✓', 'taken-out': '↑', 'missing': '!' };
+const STATUS_CSS = { 'unchecked': 'unchecked', 'on-shelf': 'on-shelf', 'taken-out': 'taken-out', 'missing': 'missing' };
+
+function switchTab(name) {
+  document.querySelectorAll('.tab-btn').forEach((b,i) => {
+    const tabs = ['check','setup','history'];
+    b.classList.toggle('active', tabs[i] === name);
+    b.setAttribute('aria-selected', tabs[i] === name);
+  });
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+}
+
+function quickSetup() {
+  const n = parseInt(document.getElementById('quick-count').value);
+  const s = parseInt(document.getElementById('shelf-count').value) || 1;
+  if (!n || n < 1) return;
+  ipads = [];
+  for (let i = 1; i <= n; i++) {
+    const shelfNum = Math.ceil(i / Math.ceil(n / s));
+    ipads.push({ id: 'ipad-' + i, label: 'iPad ' + String(i).padStart(2,'0'), shelf: shelfNum });
+  }
+  checkState = {};
+  renderSetup();
+  renderCheckGrid();
+  updateSummary();
+  saveState();
+}
+
+function addIpad() {
+  const inp = document.getElementById('ipad-label');
+  const shelfInp = document.getElementById('ipad-shelf-select');
+  const label = inp.value.trim() || ('iPad ' + String(ipads.length + 1).padStart(2,'0'));
+  const shelf = shelfInp ? parseInt(shelfInp.value) || 1 : 1;
+  ipads.push({ id: 'ipad-' + Date.now(), label, shelf });
+  inp.value = '';
+  checkState = {};
+  renderSetup();
+  renderCheckGrid();
+  updateSummary();
+  saveState();
+}
+
+function removeIpad(id) {
+  ipads = ipads.filter(p => p.id !== id);
+  delete checkState[id];
+  renderSetup();
+  renderCheckGrid();
+  updateSummary();
+  saveState();
+}
+
+function clearAll() {
+  if (!confirm('Remove all iPads from the list?')) return;
+  ipads = []; checkState = {};
+  renderSetup(); renderCheckGrid(); updateSummary();
+  saveState();
+}
+
+function getShelfCount() {
+  const nums = ipads.map(function(p){ return p.shelf || 1; });
+  return nums.length ? Math.max.apply(null, nums) : 1;
+}
+
+function renderSetup() {
+  const g = document.getElementById('setup-grid');
+  if (!ipads.length) { g.innerHTML = '<p style="font-size:var(--text-xs);color:var(--color-text-faint);">No iPads added yet.</p>'; return; }
+  const shelfCount = getShelfCount();
+  const shelves = {};
+  for (let sn = 1; sn <= shelfCount; sn++) shelves[sn] = [];
+  ipads.forEach(function(p) { shelves[p.shelf || 1].push(p); });
+  let html = '';
+  for (let sn = 1; sn <= shelfCount; sn++) {
+    html += '<div class="setup-shelf-group">';
+    html += '<div class="setup-shelf-label">Shelf ' + sn + ' <span style="font-size:var(--text-xs);color:var(--color-text-faint);font-weight:400;">(' + shelves[sn].length + ' iPads)</span></div>';
+    html += '<div class="setup-grid">';
+    html += shelves[sn].map(function(p) {
+      return '<div class="ipad-setup-item remove" data-remove-id="' + p.id + '" title="Tap to remove">' +
+        '<span class="num">' + p.label.replace('iPad ','') + '</span>' +
+        '<span class="lbl">' + p.label + '</span>' +
+        '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--color-notification);margin-top:2px;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>' +
+        '</div>';
+    }).join('');
+    html += '</div></div>';
+  }
+  g.innerHTML = html;
+  // click delegation handled by persistent listener
+  refreshShelfSelect();
+  renderTeams();
+}
+
+function refreshShelfSelect() {
+  const sel = document.getElementById('ipad-shelf-select');
+  if (!sel) return;
+  const current = sel.value;
+  const count = Math.max(getShelfCount(), 5);
+  sel.innerHTML = '';
+  for (var i = 1; i <= count; i++) {
+    var opt = document.createElement('option');
+    opt.value = i;
+    opt.textContent = 'Shelf ' + i;
+    sel.appendChild(opt);
+  }
+  sel.value = current <= count ? current : 1;
+}
+
+function renderTeams() {
+  const el = document.getElementById('team-list');
+  if (!el) return;
+  if (!teams.length) { el.innerHTML = '<p style="font-size:var(--text-xs);color:var(--color-text-faint);">No teams yet.</p>'; return; }
+  el.innerHTML = teams.map(t => `
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:var(--space-2) var(--space-3);background:var(--color-surface-2);border:1px solid var(--color-border);border-radius:var(--radius-md);margin-bottom:var(--space-2);">
+      <span style="font-size:var(--text-sm);font-weight:500;">${t.name}</span>
+      <button type="button" class="btn btn-sm" style="color:var(--color-notification);" onclick="removeTeam('${t.id}')">Remove</button>
+    </div>
+  `).join('');
+}
+
+function addTeam() {
+  const inp = document.getElementById('team-name-input');
+  const name = inp.value.trim();
+  if (!name) return;
+  const colors = ['#01696f','#964219','#006494','#7a39bb','#437a22','#a13544'];
+  teams.push({ id: 'team-' + Date.now(), name, color: colors[teams.length % colors.length] });
+  inp.value = '';
+  renderTeams();
+  saveState();
+}
+
+function removeTeam(id) {
+  teams = teams.filter(t => t.id !== id);
+  // Clear assignments for this team
+  Object.keys(checkState).forEach(k => { if (checkState[k] && checkState[k].team === id) checkState[k].team = null; });
+  renderTeams();
+  renderCheckGrid();
+  saveState();
+}
+
+function renderCheckGrid() {
+  const g = document.getElementById('check-grid');
+  if (!ipads.length) {
+    g.innerHTML = '<p style="font-size:var(--text-sm);color:var(--color-text-muted);padding:var(--space-4) 0;">No iPads configured. Go to the <strong>Setup</strong> tab to add iPads.</p>';
+    return;
+  }
+  const shelves = {};
+  ipads.forEach(function(p) {
+    const sn = p.shelf || 1;
+    if (!shelves[sn]) shelves[sn] = [];
+    shelves[sn].push(p);
+  });
+  const shelfNums = Object.keys(shelves).map(Number).sort(function(a,b){return a-b;});
+  let html = shelfNums.map(function(sn) {
+    const shelfIpads = shelves[sn];
+    const tiles = shelfIpads.map(function(p) {
+      const cs = checkState[p.id] || {};
+      const st = cs.status || 'unchecked';
+      const team = cs.team ? teams.find(function(t){ return t.id === cs.team; }) : null;
+      const teamLabel = team
+        ? '<span class="tile-team" style="background:' + team.color + '22;color:' + team.color + ';border:1px solid ' + team.color + '55;">' + team.name.replace('Team ','') + '</span>'
+        : '';
+      const assignBtn = st === 'taken-out'
+        ? '<button type="button" class="tile-assign-btn" data-assign-id="' + p.id + '" title="Assign team">&#x1F465;</button>'
+        : '';
+      return '<div class="ipad-tile ' + STATUS_CSS[st] + '" data-tile-id="' + p.id + '" role="button" tabindex="0" aria-label="' + p.label + ': ' + st + '">' +
+        '<span class="tile-icon">' + STATUS_ICONS[st] + '</span>' +
+        '<span class="tile-num">' + p.label.replace('iPad ','#') + '</span>' +
+        '<span class="tile-lbl">' + STATUS_LABELS[st] + '</span>' +
+        teamLabel + assignBtn +
+        '</div>';
+    }).join('');
+    const shelfChecked = shelfIpads.filter(function(p){ return checkState[p.id] && checkState[p.id].status !== 'unchecked'; }).length;
+    const shelfMissing = shelfIpads.filter(function(p){ return checkState[p.id] && checkState[p.id].status === 'missing'; }).length;
+    const shelfDone = shelfChecked === shelfIpads.length;
+    const hColor = shelfMissing > 0 ? 'var(--color-notification)' : shelfDone ? 'var(--color-success)' : 'var(--color-text-muted)';
+    const hIcon = shelfMissing > 0 ? '&#9888;' : shelfDone ? '&#10003;' : '&#9675;';
+    return '<div class="shelf-section">' +
+      '<div class="shelf-header">' +
+        '<span class="shelf-label" style="color:' + hColor + ';">' + hIcon + ' Shelf ' + sn + '</span>' +
+        '<span class="shelf-meta" style="color:' + hColor + ';">' + shelfChecked + ' / ' + shelfIpads.length + ' checked' + (shelfMissing > 0 ? ' &middot; ' + shelfMissing + ' missing' : '') + '</span>' +
+      '</div>' +
+      '<div class="check-grid-inner">' + tiles + '</div>' +
+      '</div>';
+  }).join('');
+  g.innerHTML = html;
+  // click/keydown delegation handled by persistent listener
+}
+
+function cycleStatus(id) {
+  const current = (checkState[id] && checkState[id].status) || 'unchecked';
+  const idx = STATUS_CYCLE.indexOf(current);
+  const next = STATUS_CYCLE[(idx + 1) % STATUS_CYCLE.length];
+  if (!checkState[id]) checkState[id] = {};
+  checkState[id].status = next;
+  if (next !== 'taken-out') checkState[id].team = null;
+  renderCheckGrid();
+  updateSummary();
+  saveState();
+}
+
+function assignTeam(id, teamId) {
+  if (!checkState[id]) checkState[id] = {};
+  checkState[id].status = 'taken-out';
+  checkState[id].team = teamId;
+  closeTeamPicker();
+  renderCheckGrid();
+  updateSummary();
+  saveState();
+}
+
+var _teamPickerCurrentId = null;
+
+function openTeamPicker(id, event) {
+  if (event) event.stopPropagation();
+  _teamPickerCurrentId = id;
+  const ipad = ipads.find(function(p){ return p.id === id; });
+  const picker = document.getElementById('team-picker');
+  const overlay = document.getElementById('team-picker-overlay');
+  let html = '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-4);">' +
+    '<span style="font-size:var(--text-base);font-weight:600;">Assign ' + (ipad ? ipad.label : '') + ' to team</span>' +
+    '<button type="button" class="btn-icon" data-picker-close aria-label="Close" style="font-size:1rem;">&#x2715;</button>' +
+    '</div>';
+  teams.forEach(function(t) {
+    html += '<button type="button" class="btn btn-secondary" data-picker-team="' + t.id + '" style="width:100%;text-align:left;margin-bottom:var(--space-2);padding:var(--space-3) var(--space-4);font-size:var(--text-sm);border-radius:var(--radius-md);">' +
+      '<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:' + t.color + ';margin-right:var(--space-2);"></span>' + t.name +
+      '</button>';
+  });
+  html += '<button type="button" class="btn btn-secondary" data-picker-close style="width:100%;text-align:center;margin-top:var(--space-1);color:var(--color-text-muted);">Cancel</button>';
+  picker.innerHTML = html;
+  overlay.classList.add('show');
+}
+
+function closeTeamPicker() {
+  document.getElementById('team-picker-overlay').classList.remove('show');
+}
+
+function updateSummary() {
+  const total = ipads.length;
+  const shelf = ipads.filter(p => checkState[p.id] && checkState[p.id].status === 'on-shelf').length;
+  const taken = ipads.filter(p => checkState[p.id] && checkState[p.id].status === 'taken-out').length;
+  const missing = ipads.filter(p => checkState[p.id] && checkState[p.id].status === 'missing').length;
+
+  document.getElementById('stat-total').textContent = total;
+  document.getElementById('stat-shelf').textContent = shelf;
+  document.getElementById('stat-taken').textContent = taken;
+  document.getElementById('stat-missing').textContent = missing;
+
+  const alertMiss = document.getElementById('alert-missing');
+  const alertOk = document.getElementById('alert-ok');
+
+  const checkedCount = ipads.filter(p => checkState[p.id] && checkState[p.id].status !== 'unchecked').length;
+  const allChecked = checkedCount === total && total > 0;
+
+  if (missing > 0) {
+    alertMiss.classList.add('show'); alertOk.classList.remove('show');
+    const missingIpads = ipads.filter(p => checkState[p.id] && checkState[p.id].status === 'missing');
+    document.getElementById('alert-missing-text').textContent = ` ${missing} device${missing>1?'s':''} unaccounted for:`;
+    document.getElementById('alert-missing-badges').innerHTML = missingIpads.map(p => `<span class="missing-badge">${p.label}</span>`).join('');
+  } else if (allChecked) {
+    alertMiss.classList.remove('show'); alertOk.classList.add('show');
+  } else {
+    alertMiss.classList.remove('show'); alertOk.classList.remove('show');
+  }
+}
+
+function resetCheck() {
+  if (!confirm('Clear all current check statuses?')) return;
+  checkState = {};
+  renderCheckGrid(); updateSummary();
+  saveState();
+}
+
+function submitCheck() {
+  if (!ipads.length) { alert('Add iPads first in the Setup tab.'); return; }
+  const unchecked = ipads.filter(p => !checkState[p.id] || checkState[p.id] === 'unchecked');
+  if (unchecked.length && !confirm(`${unchecked.length} iPad(s) not yet checked. Save anyway?`)) return;
+
+  const entry = {
+    ts: new Date(),
+    snapshot: ipads.map(p => ({
+      id: p.id, label: p.label, shelf: p.shelf || 1,
+      status: (checkState[p.id] && checkState[p.id].status) || 'unchecked',
+      team: (checkState[p.id] && checkState[p.id].team) || null
+    }))
+  };
+  history.unshift(entry);
+  renderHistory();
+  showMessage(entry);
+  saveState();
+}
+
+function getNumLabel(label) {
+  // Extract number from label like "iPad 03" -> "3"
+  const m = label.match(/(\d+)$/);
+  return m ? parseInt(m[1]).toString() : label;
+}
+
+function showMessage(entry) {
+  // Build message in requested format
+  const shelfIpads = entry.snapshot.filter(p => p.status === 'on-shelf').map(p => getNumLabel(p.label));
+  const missingIpads = entry.snapshot.filter(p => p.status === 'missing').map(p => getNumLabel(p.label));
+
+  // Group taken-out by team
+  const takenByTeam = {};
+  const takenNoTeam = [];
+  entry.snapshot.filter(p => p.status === 'taken-out').forEach(p => {
+    if (p.team) {
+      if (!takenByTeam[p.team]) takenByTeam[p.team] = [];
+      takenByTeam[p.team].push(getNumLabel(p.label));
+    } else {
+      takenNoTeam.push(getNumLabel(p.label));
+    }
+  });
+
+  let msg = 'iPad Verification\n\niPad Verification: \n\n';
+  msg += 'Verified iPad(s) at shelf:\n';
+  msg += (shelfIpads.length ? shelfIpads.join(' , ') : 'None') + '\n\n';
+
+  // Teams with assignments
+  Object.keys(takenByTeam).forEach(tid => {
+    const team = teams.find(t => t.id === tid);
+    msg += (team ? team.name : 'Unknown Team') + ' taken iPad(s):\n';
+    msg += takenByTeam[tid].join(' , ') + '\n\n';
+  });
+
+  // Unassigned taken-out
+  if (takenNoTeam.length) {
+    msg += '[Unassigned Team] taken iPad(s):\n';
+    msg += takenNoTeam.join(' , ') + '\n\n';
+  }
+
+  if (missingIpads.length) {
+    msg += '⚠ MISSING iPad(s):\n';
+    msg += missingIpads.join(' , ') + '\n\n';
+  }
+
+  msg += 'Total: ' + entry.snapshot.length + ' | Shelf: ' + shelfIpads.length + ' | Out: ' + entry.snapshot.filter(p=>p.status==='taken-out').length + ' | Missing: ' + missingIpads.length;
+
+  document.getElementById('msg-content').value = msg;
+  document.getElementById('msg-modal').classList.add('modal-open');
+}
+
+function closeMsg() { document.getElementById('msg-modal').classList.remove('modal-open'); switchTab('history'); }
+function copyMsg() {
+  const ta = document.getElementById('msg-content');
+  const text = ta.value;
+  const btn = document.getElementById('copy-msg-btn');
+  function onCopied() { btn.textContent = '✓ Copied!'; setTimeout(() => btn.textContent = '📋 Copy Message', 2000); }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(onCopied).catch(function() {
+      try { ta.select(); ta.setSelectionRange(0, 99999); document.execCommand('copy'); onCopied(); } catch(e2) {}
+    });
+  } else {
+    try { ta.select(); ta.setSelectionRange(0, 99999); document.execCommand('copy'); onCopied(); } catch(e) {}
+  }
+}
+
+function renderHistory() {
+  const el = document.getElementById('history-list');
+  if (!history.length) {
+    el.innerHTML = `<div class="empty-state"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><p>No checks saved yet.</p></div>`;
+    return;
+  }
+  el.innerHTML = '<div class="history-list">' + history.map((e, i) => {
+    const missing = e.snapshot.filter(p => p.status === 'missing');
+    const shelf = e.snapshot.filter(p => p.status === 'on-shelf').length;
+    const taken = e.snapshot.filter(p => p.status === 'taken-out').length;
+    const badge = missing.length
+      ? `<span class="hbadge hbadge-miss">⚠ ${missing.length} missing: ${missing.map(p=>p.label).join(', ')}</span>`
+      : `<span class="hbadge hbadge-ok">✓ All accounted for</span>`;
+    return `<div class="history-entry">
+      <div style="flex:1">
+        <div style="font-weight:600; font-size: var(--text-sm);">Check #${history.length - i}</div>
+        <div class="history-meta">${e.ts.toLocaleString()} · ${e.snapshot.length} iPads · ${shelf} shelf · ${taken} out</div>
+        <div class="history-badges">${badge}</div>
+      </div>
+    </div>`;
+  }).join('') + '</div>';
+}
+
+function exportCSV() {
+  if (!history.length) { alert('No history to export yet.'); return; }
+  const rows = [['Check #', 'DateTime', 'iPad Label', 'Shelf', 'Status']];
+  history.forEach((e, i) => {
+    e.snapshot.forEach(p => rows.push([history.length - i, e.ts.toISOString(), p.label, p.status]));
+  });
+  const csv = rows.map(r => r.map(c => '"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n');
+  // Show in modal for copy-paste (sandbox blocks file downloads)
+  document.getElementById('export-content').value = csv;
+  document.getElementById('export-modal').classList.add('modal-open');
+}
+function closeExport() { document.getElementById('export-modal').classList.remove('modal-open'); }
+function copyExport() {
+  const ta = document.getElementById('export-content');
+  const text = ta.value;
+  const btn = document.getElementById('copy-btn');
+  function onCopied() { btn.textContent = '✓ Copied!'; setTimeout(() => btn.textContent = 'Copy All', 2000); }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(onCopied).catch(function() {
+      try { ta.select(); ta.setSelectionRange(0, 99999); document.execCommand('copy'); onCopied(); } catch(e2) {}
+    });
+  } else {
+    try { ta.select(); ta.setSelectionRange(0, 99999); document.execCommand('copy'); onCopied(); } catch(e) {}
+  }
+}
+
+
+// Team picker closed via overlay click (handled inline)
+
+// Bind static buttons via addEventListener for better mobile compatibility
+// ── Persistence ──────────────────────────────────────────────
+function saveState() {
+  try {
+    localStorage.setItem('ipadcheck_ipads', JSON.stringify(ipads));
+    localStorage.setItem('ipadcheck_teams', JSON.stringify(teams));
+    localStorage.setItem('ipadcheck_history', JSON.stringify(history));
+    localStorage.setItem('ipadcheck_checkstate', JSON.stringify(checkState));
+  } catch(e) {}
+}
+
+function loadState() {
+  try {
+    var savedIpads = localStorage.getItem('ipadcheck_ipads');
+    var savedTeams = localStorage.getItem('ipadcheck_teams');
+    var savedHistory = localStorage.getItem('ipadcheck_history');
+    var savedCheck = localStorage.getItem('ipadcheck_checkstate');
+    if (savedIpads) ipads = JSON.parse(savedIpads);
+    if (savedTeams) teams = JSON.parse(savedTeams);
+    if (savedHistory) {
+      history = JSON.parse(savedHistory);
+      // Restore Date objects
+      history.forEach(function(e) { e.ts = new Date(e.ts); });
+    }
+    if (savedCheck) checkState = JSON.parse(savedCheck);
+    return !!(savedIpads || savedTeams || savedHistory);
+  } catch(e) { return false; }
+}
+// ─────────────────────────────────────────────────────────────
+
+document.addEventListener('DOMContentLoaded', function() {
+  var btnExport = document.getElementById('btn-export');
+  if (btnExport) btnExport.addEventListener('click', function() { exportCSV(); });
+
+  var btnTabCheck = document.getElementById('btn-tab-check');
+  if (btnTabCheck) btnTabCheck.addEventListener('click', function() { switchTab('check'); });
+
+  var btnTabSetup = document.getElementById('btn-tab-setup');
+  if (btnTabSetup) btnTabSetup.addEventListener('click', function() { switchTab('setup'); });
+
+  var btnTabHistory = document.getElementById('btn-tab-history');
+  if (btnTabHistory) btnTabHistory.addEventListener('click', function() { switchTab('history'); });
+
+  var btnSave = document.getElementById('btn-save-check');
+  if (btnSave) btnSave.addEventListener('click', function() { submitCheck(); });
+
+  var btnReset = document.getElementById('btn-reset-check');
+  if (btnReset) btnReset.addEventListener('click', function() { resetCheck(); });
+
+  var btnApply = document.getElementById('btn-quick-apply');
+  if (btnApply) btnApply.addEventListener('click', function() { quickSetup(); });
+
+  var btnAddIpad = document.getElementById('btn-add-ipad');
+  if (btnAddIpad) btnAddIpad.addEventListener('click', function() { addIpad(); });
+
+  var btnClear = document.getElementById('btn-clear-all');
+  if (btnClear) btnClear.addEventListener('click', function() { clearAll(); });
+
+  var btnAddTeam = document.getElementById('btn-add-team');
+  if (btnAddTeam) btnAddTeam.addEventListener('click', function() { addTeam(); });
+
+  // Enter key support on inputs
+  var ipadLabelInput = document.getElementById('ipad-label');
+  if (ipadLabelInput) ipadLabelInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') addIpad(); });
+
+  var quickCountInput = document.getElementById('quick-count');
+  if (quickCountInput) quickCountInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') quickSetup(); });
+
+  var teamNameInput = document.getElementById('team-name-input');
+  if (teamNameInput) teamNameInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') addTeam(); });
+
+  // Keyboard support handled inside renderCheckGrid via event delegation
+
+  // Persistent delegated listeners for dynamically rendered elements
+  // Team picker - use delegation so injected buttons always work
+  document.getElementById('team-picker').addEventListener('click', function(e) {
+    if (e.target.closest('[data-picker-close]')) { closeTeamPicker(); return; }
+    var teamBtn = e.target.closest('[data-picker-team]');
+    if (teamBtn && _teamPickerCurrentId) assignTeam(_teamPickerCurrentId, teamBtn.getAttribute('data-picker-team'));
+  });
+  document.getElementById('check-grid').addEventListener('click', function(e) {
+    var assignBtn = e.target.closest('[data-assign-id]');
+    if (assignBtn) { e.stopPropagation(); openTeamPicker(assignBtn.getAttribute('data-assign-id'), e); return; }
+    var tile = e.target.closest('[data-tile-id]');
+    if (tile) cycleStatus(tile.getAttribute('data-tile-id'));
+  });
+  document.getElementById('check-grid').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' || e.key === ' ') {
+      var tile = e.target.closest('[data-tile-id]');
+      if (tile) { e.preventDefault(); cycleStatus(tile.getAttribute('data-tile-id')); }
+    }
+  });
+  document.getElementById('setup-grid').addEventListener('click', function(e) {
+    var item = e.target.closest('[data-remove-id]');
+    if (item) removeIpad(item.getAttribute('data-remove-id'));
+  });
+
+  // Theme toggle
+  var t = document.querySelector('[data-theme-toggle]'), r = document.documentElement;
+  var d = matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light';
+  r.setAttribute('data-theme', d);
+  updateThemeIcon(t, d);
+  t.addEventListener('click', function() {
+    d = d === 'dark' ? 'light' : 'dark';
+    r.setAttribute('data-theme', d);
+    updateThemeIcon(t, d);
+  });
+
+  // Load saved state, or initialize defaults
+  var hasSaved = loadState();
+  if (!hasSaved || !ipads.length) {
+    var totalShelves = 5, perShelf = 4;
+    for (var i = 1; i <= totalShelves * perShelf; i++) {
+      var shelfNum = Math.ceil(i / perShelf);
+      ipads.push({ id: 'ipad-' + i, label: 'iPad ' + String(i).padStart(2,'0'), shelf: shelfNum });
+    }
+  }
+  renderSetup(); renderTeams(); renderCheckGrid(); updateSummary(); renderHistory();
+});
+
+function updateThemeIcon(btn, theme) {
+  btn.innerHTML = theme === 'dark'
+    ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>'
+    : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+}
+</script>
+
+<!-- Team Picker Bottom Sheet -->
+<div id="team-picker-overlay" onclick="closeTeamPicker()">
+  <div id="team-picker" onclick="event.stopPropagation()"></div>
+</div>
+
+<!-- Message Modal -->
+<div id="msg-modal" class="modal-overlay" onclick="if(event.target===this)closeMsg();">
+  <div style="background:var(--color-surface); border:1px solid var(--color-border); border-radius:var(--radius-xl); padding:var(--space-6); max-width:520px; width:100%; box-shadow:var(--shadow-lg);">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:var(--space-3);">
+      <strong style="font-size:var(--text-base);">📤 Verification Message</strong>
+      <button type="button" class="btn-icon" onclick="closeMsg()" aria-label="Close">✕</button>
+    </div>
+    <p style="font-size:var(--text-sm); color:var(--color-text-muted); margin-bottom:var(--space-3);">Copy and send this message to your team or paste into WhatsApp / Telegram.</p>
+    <textarea id="msg-content" readonly style="width:100%; height:260px; font-family:monospace; font-size:var(--text-xs); background:var(--color-surface-offset); border:1px solid var(--color-border); border-radius:var(--radius-md); padding:var(--space-3); resize:vertical; color:var(--color-text); line-height:1.7;"></textarea>
+    <div style="display:flex; gap:var(--space-3); margin-top:var(--space-4); flex-wrap:wrap;">
+      <button type="button" id="copy-msg-btn" class="btn btn-primary" onclick="copyMsg()">📋 Copy Message</button>
+      <button type="button" class="btn btn-secondary" onclick="closeMsg()">Done</button>
+    </div>
+  </div>
+</div>
+
+<!-- Export Modal -->
+<div id="export-modal" class="modal-overlay" onclick="if(event.target===this)closeExport();">
+  <div style="background:var(--color-surface); border:1px solid var(--color-border); border-radius:var(--radius-xl); padding:var(--space-6); max-width:600px; width:100%; box-shadow:var(--shadow-lg);">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:var(--space-4);">
+      <strong style="font-size:var(--text-base);">📋 Export CSV Data</strong>
+      <button type="button" class="btn-icon" onclick="closeExport()" aria-label="Close">✕</button>
+    </div>
+    <p style="font-size:var(--text-sm); color:var(--color-text-muted); margin-bottom:var(--space-3);">Copy this data and paste it into Excel, Google Sheets, or a .csv file.</p>
+    <textarea id="export-content" readonly style="width:100%; height:200px; font-family:monospace; font-size:var(--text-xs); background:var(--color-surface-offset); border:1px solid var(--color-border); border-radius:var(--radius-md); padding:var(--space-3); resize:vertical; color:var(--color-text);"></textarea>
+    <div style="display:flex; gap:var(--space-3); margin-top:var(--space-4);">
+      <button type="button" id="copy-btn" class="btn btn-primary" onclick="copyExport()">Copy All</button>
+      <button type="button" class="btn btn-secondary" onclick="closeExport()">Close</button>
+    </div>
+  </div>
+</div>
+</body>
+</html>
